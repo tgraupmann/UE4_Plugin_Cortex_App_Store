@@ -1,0 +1,14 @@
+ExampleProject/Binaries/
+ExampleProject/.vs/
+ExampleProject/Intermediate/
+ExampleProject/Plugins/OuyaSDKPlugin/Binaries/
+ExampleProject/Plugins/OuyaSDKPlugin/Intermediate/
+ExampleProject/Saved/Cooked/
+ExampleProject/Saved/Stats/
+ExampleProject/Saved/StagedBuilds/
+ExampleProject/Saved/Logs/
+ExampleProject/Saved/Temp/
+ExampleProject/Saved/
+ExampleProject/DerivedDataCache/
+ExampleProject/Build/Android_DXT/
+ExampleProject/ExampleProject.sdf
