@@ -2,6 +2,8 @@
 
 #include "OuyaSDKPluginPrivatePCH.h"
 
+#include "OuyaSDKPlugin.h"
+
 // this test is Android specific
 #if PLATFORM_ANDROID
 
@@ -37,11 +39,20 @@ class FOuyaSDKPlugin : public IOuyaSDKPlugin
 
 IMPLEMENT_MODULE( FOuyaSDKPlugin, OuyaSDKPlugin)
 
-
+DEFINE_LOG_CATEGORY(LogOuyaSDKPlugin);
 
 void FOuyaSDKPlugin::StartupModule()
 {
 	// This code will execute after your module is loaded into memory (but after global variables are initialized, of course.)
+
+	if (IOuyaSDKPlugin::IsAvailable())
+	{
+		UE_LOG(LogOuyaSDKPlugin, Log, TEXT("*** OuyaSDKPlugin has loaded. ***"));
+	}
+	else
+	{
+		UE_LOG(LogOuyaSDKPlugin, Log, TEXT("*** OuyaSDKPlugin has not loaded! ***"));
+	}
 
 	// Android specific code
 #if PLATFORM_ANDROID
