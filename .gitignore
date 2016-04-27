@@ -12,3 +12,5 @@ ExampleProject/Saved/
 ExampleProject/DerivedDataCache/
 ExampleProject/Build/Android_DXT/
 ExampleProject/ExampleProject.sdf
+ExampleProject/ExampleProject.opensdf
+ExampleProject/Build/Android/src/tv/ouya/examples/unreal/exampleproject/OBBData.java
