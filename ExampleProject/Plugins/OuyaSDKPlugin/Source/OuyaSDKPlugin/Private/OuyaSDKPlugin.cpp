@@ -13,10 +13,15 @@
 // The JNI_OnLoad callback is defined in the JNI code
 #include "../../../Launch/Public/Android/AndroidJNI.h"
 
+// Get a reference to the JNI environment
+#include "../../../Core/Public/Android/AndroidApplication.h"
+
 // Find a class within the JAR
 #include "OuyaSDK_OuyaController.h"
 
 using namespace tv_ouya_console_api_OuyaController;
+
+extern JavaVM* GJavaVM;
 
 int AndroidPluginTestHandleRegisterCallbackJNIOnLoad(JNIEnv* env);
 int RegisterFromJarOuyaController(JNIEnv* env);
@@ -57,10 +62,8 @@ void FOuyaSDKPlugin::StartupModule()
 	// Android specific code
 #if PLATFORM_ANDROID
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** StartupModule ***");
-	RegisterCallbackJNIOnLoad(AndroidPluginTestHandleRegisterCallbackJNIOnLoad);
 #endif
 }
-
 
 void FOuyaSDKPlugin::ShutdownModule()
 {
@@ -75,11 +78,20 @@ void FOuyaSDKPlugin::ShutdownModule()
 // Android specific code
 #if PLATFORM_ANDROID
 
+// Use a global variable to cause the constructor to invoke
+AndroidPluginTestSetupCallbackJNIOnload GSetupCallbackJNIOnload;
+
+// Use the constructor to register the callback using the global var: `GSetupCallbackJNIOnload`
+AndroidPluginTestSetupCallbackJNIOnload::AndroidPluginTestSetupCallbackJNIOnload()
+{
+	RegisterCallbackJNIOnLoad(AndroidPluginTestHandleRegisterCallbackJNIOnLoad);
+}
+
 // define the callback function that will be invoked in the JNI_OnLoad event
 int AndroidPluginTestHandleRegisterCallbackJNIOnLoad(JNIEnv* env)
 {
 	// check the adb logcat
-	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** This indicates a successful test. The callback was invoked! ***");
+	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** AndroidPluginTestHandleRegisterCallbackJNIOnLoad ***");
 
 	if (RegisterFromJarOuyaController(env) == JNI_ERR)
 	{
