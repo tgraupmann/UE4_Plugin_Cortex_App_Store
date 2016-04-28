@@ -13,8 +13,12 @@
 	"Modules": [
 		{
 			"Name": "OuyaSDKPlugin",
-			"Type": "Developer",
-			"LoadingPhase": "Default"
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"WhitelistPlatforms" :
+			[
+				"Android"
+			]
 		}
 	],
 	"EnabledByDefault": true,
