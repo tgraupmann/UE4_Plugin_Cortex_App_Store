@@ -202,4 +202,25 @@ import java.util.List;
 		</insert>
 	</gameActivityOnActivityResultAdditions>
 
+	<!-- optional updates applied to AndroidManifest.xml -->
+	<androidManifestUpdates>
+		<!-- update the GameActivity activity -->
+		<loopElements tag="activity">
+			<setStringFromAttribute result="activityName" tag="$" name="android:name"/>
+			<setBoolIsEqual result="bGameActivity" arg1="$S(activityName)" arg2="com.epicgames.ue4.SplashActivity"/>
+			<if condition="bGameActivity">
+				<true>
+					<!-- add to intent-filter -->
+					<setElement result="intentInfo" value="category"/>
+					<addAttribute tag="$intentInfo" name="android:name" value="android.intent.category.LEANBACK_LAUNCHER"/>
+					<addElement tag="intent-filter" name="intentInfo"/>
+					<!-- add to intent-filter -->
+					<setElement result="intentInfo" value="category"/>
+					<addAttribute tag="$intentInfo" name="android:name" value="tv.ouya.intent.category.GAME"/>
+					<addElement tag="intent-filter" name="intentInfo"/>
+				</true>
+			</if>
+		</loopElements>
+	</androidManifestUpdates>
+
 </root>
