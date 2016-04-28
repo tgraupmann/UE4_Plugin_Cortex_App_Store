@@ -23,7 +23,7 @@ using namespace tv_ouya_console_api_OuyaController;
 
 extern JavaVM* GJavaVM;
 
-int AndroidPluginTestHandleRegisterCallbackJNIOnLoad(JNIEnv* env);
+int SetupJNI(JNIEnv* env);
 int RegisterFromJarOuyaController(JNIEnv* env);
 int RegisterFromJavaPluginTestGameActivity(JNIEnv* env);
 
@@ -62,6 +62,11 @@ void FOuyaSDKPlugin::StartupModule()
 	// Android specific code
 #if PLATFORM_ANDROID
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** StartupModule ***");
+
+	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** FAndroidApplication::GetJavaEnv() ***");
+	JNIEnv* env = FAndroidApplication::GetJavaEnv();
+
+	SetupJNI(env);
 #endif
 }
 
@@ -78,17 +83,8 @@ void FOuyaSDKPlugin::ShutdownModule()
 // Android specific code
 #if PLATFORM_ANDROID
 
-// Use a global variable to cause the constructor to invoke
-AndroidPluginTestSetupCallbackJNIOnload GSetupCallbackJNIOnload;
-
-// Use the constructor to register the callback using the global var: `GSetupCallbackJNIOnload`
-AndroidPluginTestSetupCallbackJNIOnload::AndroidPluginTestSetupCallbackJNIOnload()
-{
-	RegisterCallbackJNIOnLoad(AndroidPluginTestHandleRegisterCallbackJNIOnLoad);
-}
-
-// define the callback function that will be invoked in the JNI_OnLoad event
-int AndroidPluginTestHandleRegisterCallbackJNIOnLoad(JNIEnv* env)
+// Setup the JNI classes, called from StartupModule
+int SetupJNI(JNIEnv* env)
 {
 	// check the adb logcat
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** AndroidPluginTestHandleRegisterCallbackJNIOnLoad ***");
@@ -107,6 +103,7 @@ int AndroidPluginTestHandleRegisterCallbackJNIOnLoad(JNIEnv* env)
 	return JNI_OK;
 }
 
+// register classes from the JAR
 int RegisterFromJarOuyaController(JNIEnv* env)
 {
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Initialize the OuyaController classes... ***");
@@ -122,11 +119,15 @@ int RegisterFromJarOuyaController(JNIEnv* env)
 	}
 }
 
+// register classes from the JAVA
 int RegisterFromJavaPluginTestGameActivity(JNIEnv* env)
 {
 	const char* strPluginJavaClass = "tv/ouya/sdk/PluginTestGameActivity";
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Searching for %s... ***", strPluginJavaClass);
-	jclass jcPluginJavaClass = env->FindClass(strPluginJavaClass);
+
+	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** FAndroidApplication::FindJavaClass() ***");
+	jclass jcPluginJavaClass = FAndroidApplication::FindJavaClass(strPluginJavaClass);
+
 	if (jcPluginJavaClass)
 	{
 		__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Found class %s ***", strPluginJavaClass);

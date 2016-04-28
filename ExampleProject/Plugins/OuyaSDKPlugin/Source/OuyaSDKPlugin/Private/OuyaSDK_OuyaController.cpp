@@ -20,6 +20,9 @@
 // this test is Android specific
 #if PLATFORM_ANDROID
 
+// Get a reference to the JNI environment
+#include "../../../Core/Public/Android/AndroidApplication.h"
+
 #include <android/log.h>
 #include <jni.h>
 
@@ -50,7 +53,7 @@ namespace tv_ouya_console_api_OuyaController
 			{
 				__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "Searching for %s", strOuyaControllerClass);
 			}
-			_jcOuyaController = env->FindClass(strOuyaControllerClass);
+			_jcOuyaController = FAndroidApplication::FindJavaClass(strOuyaControllerClass);
 			if (_jcOuyaController)
 			{
 				if (VERBOSE_LOGGING)
