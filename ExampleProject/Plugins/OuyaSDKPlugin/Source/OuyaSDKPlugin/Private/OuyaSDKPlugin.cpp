@@ -21,8 +21,7 @@
 
 using namespace tv_ouya_console_api_OuyaController;
 
-extern JavaVM* GJavaVM;
-
+// function prototypes
 int SetupJNI(JNIEnv* env);
 int RegisterFromJarOuyaController(JNIEnv* env);
 int RegisterFromJavaPluginTestGameActivity(JNIEnv* env);
@@ -87,7 +86,7 @@ void FOuyaSDKPlugin::ShutdownModule()
 int SetupJNI(JNIEnv* env)
 {
 	// check the adb logcat
-	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** AndroidPluginTestHandleRegisterCallbackJNIOnLoad ***");
+	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** SetupJNI ***");
 
 	if (RegisterFromJarOuyaController(env) == JNI_ERR)
 	{
@@ -99,7 +98,7 @@ int SetupJNI(JNIEnv* env)
 		return JNI_ERR;
 	}	
 
-	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** AndroidPluginTestHandleRegisterCallbackJNIOnLoad initialized successfully. ***");
+	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** SetupJNI initialized successfully. ***");
 	return JNI_OK;
 }
 
