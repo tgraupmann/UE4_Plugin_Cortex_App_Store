@@ -207,7 +207,9 @@ import java.util.List;
 		<!-- update the GameActivity application -->
 		<loopElements tag="application">
 			<addAttribute tag="application" name="android:logo" value="@drawable/leanback_icon"/>
+			<!-- requires API-21 to build
 			<addAttribute tag="application" name="android:isGame" value="true"/>
+			-->
 		</loopElements>
 		<!-- update the GameActivity activity -->
 		<loopElements tag="activity">
