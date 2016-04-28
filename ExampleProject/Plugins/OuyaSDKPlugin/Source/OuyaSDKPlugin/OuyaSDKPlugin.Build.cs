@@ -40,11 +40,11 @@ namespace UnrealBuildTool.Rules
 					// ... add any modules that your module loads dynamically here ...
 				});
 
-            if (Target.Platform == UnrealTargetPlatform.Android)
-            {
-                string pluginPath = Utils.MakePathRelativeTo(ModuleDirectory, BuildConfiguration.RelativeEnginePath);
-                AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(pluginPath, "OuyaSDKPlugin_APL.xml")));
-            }
+			if (Target.Platform == UnrealTargetPlatform.Android)
+			{
+				string pluginPath = Utils.MakePathRelativeTo(ModuleDirectory, BuildConfiguration.RelativeEnginePath);
+				AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(pluginPath, "OuyaSDKPlugin_APL.xml")));
+			}
 		}
 	}
 }
