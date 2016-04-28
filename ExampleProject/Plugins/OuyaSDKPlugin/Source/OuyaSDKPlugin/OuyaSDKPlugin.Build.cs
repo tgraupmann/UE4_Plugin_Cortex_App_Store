@@ -1,4 +1,5 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
+using System.IO;
 
 namespace UnrealBuildTool.Rules
 {
@@ -38,6 +39,12 @@ namespace UnrealBuildTool.Rules
 				{
 					// ... add any modules that your module loads dynamically here ...
 				});
+
+            if (Target.Platform == UnrealTargetPlatform.Android)
+            {
+                string pluginPath = Utils.MakePathRelativeTo(ModuleDirectory, BuildConfiguration.RelativeEnginePath);
+                AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(pluginPath, "OuyaSDKPlugin_APL.xml")));
+            }
 		}
 	}
 }
