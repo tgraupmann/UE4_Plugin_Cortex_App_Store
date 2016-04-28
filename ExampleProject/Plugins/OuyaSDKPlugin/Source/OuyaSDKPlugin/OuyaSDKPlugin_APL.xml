@@ -25,4 +25,181 @@
 		</insert>
 	</proguardAdditions>
 
+	<!-- optional additions to the GameActivity imports in GameActivity.java -->
+	<gameActivityImportAdditions>
+		<insert>
+import android.view.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+		</insert>
+	</gameActivityImportAdditions>
+
+	<!-- optional additions to the GameActivity class in GameActivity.java -->
+	<gameActivityClassAdditions>
+		<insert>
+	/**
+	UE4 plugins can use the GameActivity's listener to get
+	the activity lifecycle events.
+	*/
+	public interface OnGameActivityListener {
+
+		// listeners receive motion events
+		boolean dispatchGenericMotionEvent(MotionEvent motionEvent);
+
+		// listeners receive key events
+		boolean dispatchKeyEvent(KeyEvent keyEvent);
+
+		// listeners receive activity result events
+		boolean onActivityResult(int requestCode, int resultCode, Intent data);
+
+		// listeners receive create events
+		void onCreate(Bundle savedInstanceState);
+
+		// listeners receive destroy events
+		void onDestroy();
+
+		// listeners receive pause events
+		void onPause();
+
+		// listeners receive resume events
+		void onResume();
+
+		// listeners receive start events
+		void onStart();
+
+		// listeners receive stop events
+		void onStop();
+	}
+
+	// The list of game activity listeners
+	private static List&lt;OnGameActivityListener&gt; sOnGameActivityListeners = new ArrayList();
+
+	@Override
+	public boolean dispatchGenericMotionEvent(MotionEvent motionEvent) {
+		// the event will be handled by listeners if provided
+		if (sOnGameActivityListeners.size() > 0) {
+			for (OnGameActivityListener listener : sOnGameActivityListeners) {
+				boolean result = listener.dispatchGenericMotionEvent(motionEvent);
+				if (result) {
+					//handled by listener
+					return true;
+				}
+			}
+			// the event was not handled
+			return false;
+		}
+		// default behaviour
+		return super.dispatchGenericMotionEvent(motionEvent);
+	}
+
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent keyEvent) {
+		// the event will be handled by listeners if provided
+		if (sOnGameActivityListeners.size() > 0) {
+			for (OnGameActivityListener listener : sOnGameActivityListeners) {
+				boolean result = listener.dispatchKeyEvent(keyEvent);
+				if (result) {
+					//handled by listener
+					return true;
+				}
+			}
+			// the event was not handled
+			return false;
+		}
+		// default behaviour
+		return super.dispatchKeyEvent(keyEvent);
+	}
+
+	// register a listener to receive activity lifecycle callbacks
+	public static void registerOnGameActivityListener(OnGameActivityListener listener) {
+		// register each listener only once
+		if (!sOnGameActivityListeners.contains(listener)) {
+			sOnGameActivityListeners.add(listener);
+		}
+	}
+
+	// the callback will no longer receive activity lifecycle callbacks
+	public static void unregisterOnGameActivityListener(OnGameActivityListener listener) {
+		// remove the listener
+		if (sOnGameActivityListeners.contains(listener)) {
+			sOnGameActivityListeners.remove(listener);
+		}
+	}
+		</insert>
+	</gameActivityClassAdditions>
+
+	<!-- optional additions to GameActivity onCreate in GameActivity.java -->
+	<gameActivityOnCreateAdditions>
+		<insert>
+		// notify listeners
+		for (OnGameActivityListener listener : sOnGameActivityListeners) {
+			listener.onCreate(savedInstanceState);
+		}
+		</insert>
+	</gameActivityOnCreateAdditions>
+
+	<!-- optional additions to GameActivity onDestroy in GameActivity.java -->
+	<gameActivityOnDestroyAdditions>
+		<insert>
+		// notify listeners
+		for (OnGameActivityListener listener : sOnGameActivityListeners) {
+			listener.onDestroy();
+		}
+		</insert>
+	</gameActivityOnDestroyAdditions>
+
+	<!-- optional additions to GameActivity onStart in GameActivity.java -->
+	<gameActivityOnStartAdditions>
+		<insert>
+		// notify listeners
+		for (OnGameActivityListener listener : sOnGameActivityListeners) {
+			listener.onStart();
+		}
+		</insert>
+	</gameActivityOnStartAdditions>
+
+	<!-- optional additions to GameActivity onStop in GameActivity.java -->
+	<gameActivityOnStopAdditions>
+		<insert>
+		// notify listeners
+		for (OnGameActivityListener listener : sOnGameActivityListeners) {
+			listener.onStop();
+		}
+		</insert>
+	</gameActivityOnStopAdditions>
+
+	<!-- optional additions to GameActivity onPause in GameActivity.java -->
+	<gameActivityOnPauseAdditions>
+		<insert>
+		// notify listeners
+		for (OnGameActivityListener listener : sOnGameActivityListeners) {
+			listener.onPause();
+		}
+		</insert>
+	</gameActivityOnPauseAdditions>
+
+	<!-- optional additions to GameActivity onResume in GameActivity.java -->
+	<gameActivityOnResumeAdditions>
+		<insert>
+		// notify listeners
+		for (OnGameActivityListener listener : sOnGameActivityListeners) {
+			listener.onResume();
+		}
+		</insert>
+	</gameActivityOnResumeAdditions>
+
+	<!-- optional additions to GameActivity onActivityResult in GameActivity.java -->
+	<gameActivityOnActivityResultAdditions>
+		<insert>
+		// listeners have a chance to process the activity result
+		for (OnGameActivityListener listener : sOnGameActivityListeners) {
+			// if a listener returns true, the activity result has been handled
+			if (listener.onActivityResult(requestCode, resultCode, data)) {
+				// no further processing needed
+				return;
+			}
+		}
+		</insert>
+	</gameActivityOnActivityResultAdditions>
+
 </root>
