@@ -204,6 +204,11 @@ import java.util.List;
 
 	<!-- optional updates applied to AndroidManifest.xml -->
 	<androidManifestUpdates>
+		<!-- update the GameActivity application -->
+		<loopElements tag="application">
+			<addAttribute tag="application" name="android:logo" value="@drawable/leanback_icon"/>
+			<addAttribute tag="application" name="android:isGame" value="true"/>
+		</loopElements>
 		<!-- update the GameActivity activity -->
 		<loopElements tag="activity">
 			<setStringFromAttribute result="activityName" tag="$" name="android:name"/>
