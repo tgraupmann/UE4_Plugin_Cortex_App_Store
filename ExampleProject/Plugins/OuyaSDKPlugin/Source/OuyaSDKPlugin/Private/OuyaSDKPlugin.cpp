@@ -10,11 +10,14 @@
 // Get access to Android logging
 #include <android/log.h>
 
+// Get a reference to the JNI environment
+#include "../../../Core/Public/Android/AndroidApplication.h"
+
 // The JNI_OnLoad callback is defined in the JNI code
 #include "../../../Launch/Public/Android/AndroidJNI.h"
 
-// Get a reference to the JNI environment
-#include "../../../Core/Public/Android/AndroidApplication.h"
+// The Android Input callback is defined in the launcher code
+#include "../../../Launch/Public/Android/LaunchAndroid.h"
 
 // Find a class within the JAR
 #include "OuyaSDK_OuyaController.h"
@@ -152,6 +155,24 @@ int RegisterFromJavaPluginTestGameActivity(JNIEnv* env)
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Invoking method %s...", strPluginJavaMethod);
 	env->CallStaticVoidMethod(jcPluginJavaClass, jmInit);
 	return JNI_OK;
+}
+
+// Use a global variable to cause the constructor to invoke
+AndroidPluginTestSetupCallbackAndroidInput GSetupCallbackAndroidInput;
+
+// define the callback function that will get the android input events
+int32_t AndroidPluginTestHandleRegisterCallbackAndroidInput(struct android_app* app, AInputEvent* event)
+{
+	// check the adb logcat
+	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** This indicates a successful test. The callback was invoked! ***");
+
+	return 0;
+}
+
+// Use the constructor to register the input callback using the global var: `GSetupCallbackAndroidInput`
+AndroidPluginTestSetupCallbackAndroidInput::AndroidPluginTestSetupCallbackAndroidInput()
+{
+	RegisterCallbackAndroidInput(AndroidPluginTestHandleRegisterCallbackAndroidInput);
 }
 
 #endif
