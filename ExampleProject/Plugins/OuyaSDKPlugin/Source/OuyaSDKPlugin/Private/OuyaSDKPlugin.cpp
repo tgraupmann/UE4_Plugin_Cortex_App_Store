@@ -19,21 +19,30 @@
 // The Android Input callback is defined in the launcher code
 #include "../../../Launch/Public/Android/LaunchAndroid.h"
 
-// Find a class within the JAR
-#include "OuyaSDK_OuyaController.h"
+// OUYA handles remapping native input
+#include "OuyaSDK_OuyaInputView.h"
+#include "OuyaSDK_PluginOuya.h"
 
-using namespace tv_ouya_console_api_OuyaController;
+// OUYA handles remapping native input
+// Include the OUYA namespace
+using namespace OuyaSDK;
+using namespace tv_ouya_sdk_OuyaInputView;
 
 // function prototypes
-int SetupJNI(JNIEnv* env);
-int RegisterFromJarOuyaController(JNIEnv* env);
-int RegisterFromJavaPluginTestGameActivity(JNIEnv* env);
+int SetupJNI();
+int RegisterJavaPluginClasses();
+int RegisterFromJavaPluginTestGameActivity();
 
 // Redefine a tag for logging
 #ifdef LOG_TAG
 #undef LOG_TAG
 #endif
 #define LOG_TAG "OuyaSDKPlugin"
+
+#ifdef ENABLE_VERBOSE_LOGGING
+#undef ENABLE_VERBOSE_LOGGING
+#endif
+#define ENABLE_VERBOSE_LOGGING true
 
 #endif
 
@@ -63,12 +72,18 @@ void FOuyaSDKPlugin::StartupModule()
 
 	// Android specific code
 #if PLATFORM_ANDROID
+#if ENABLE_VERBOSE_LOGGING
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** StartupModule ***");
+#endif
 
-	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** FAndroidApplication::GetJavaEnv() ***");
-	JNIEnv* env = FAndroidApplication::GetJavaEnv();
-
-	SetupJNI(env);
+	if (SetupJNI() == JNI_OK)
+	{
+		UE_LOG(LogOuyaSDKPlugin, Log, TEXT("*** JNI has initialized. ***"));
+	}
+	else
+	{
+		UE_LOG(LogOuyaSDKPlugin, Log, TEXT("*** JNI failed to initialize! ***"));
+	}
 #endif
 }
 
@@ -78,7 +93,9 @@ void FOuyaSDKPlugin::ShutdownModule()
 	// we call this function before unloading the module.
 
 #if PLATFORM_ANDROID
+#if ENABLE_VERBOSE_LOGGING
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** ShutdownModule ***");
+#endif
 #endif
 }
 
@@ -86,53 +103,77 @@ void FOuyaSDKPlugin::ShutdownModule()
 #if PLATFORM_ANDROID
 
 // Setup the JNI classes, called from StartupModule
-int SetupJNI(JNIEnv* env)
+int SetupJNI()
 {
-	// check the adb logcat
+#if ENABLE_VERBOSE_LOGGING
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** SetupJNI ***");
+#endif
 
-	if (RegisterFromJarOuyaController(env) == JNI_ERR)
+	if (OuyaInputView::InitJNI() == JNI_ERR)
 	{
 		return JNI_ERR;
 	}
 
-	if (RegisterFromJavaPluginTestGameActivity(env) == JNI_ERR)
+	if (RegisterJavaPluginClasses() == JNI_ERR)
+	{
+		return JNI_ERR;
+	}
+
+	if (RegisterFromJavaPluginTestGameActivity() == JNI_ERR)
 	{
 		return JNI_ERR;
 	}	
 
+#if ENABLE_VERBOSE_LOGGING
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** SetupJNI initialized successfully. ***");
+#endif
 	return JNI_OK;
 }
 
-// register classes from the JAR
-int RegisterFromJarOuyaController(JNIEnv* env)
+// register classes from the OUYA SDK
+int RegisterJavaPluginClasses()
 {
-	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Initialize the OuyaController classes... ***");
-	if (OuyaController::InitJNI(env) == JNI_ERR)
+#if ENABLE_VERBOSE_LOGGING
+	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Initialize the OuyaInputView classes ***");
+#endif
+
+	if (OuyaInputView::InitJNI() == JNI_ERR)
 	{
-		__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Failed to initialize the OuyaController class! ***");
+		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to initialize the OuyaInputView class! ***");
 		return JNI_ERR;
 	}
-	else
+
+#if ENABLE_VERBOSE_LOGGING
+	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Initialize the PluginOuya classes!***");
+#endif
+
+	if (PluginOuya::InitJNI() == JNI_ERR)
 	{
-		__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Registered the OuyaController class. ***");
-		return JNI_OK;
+		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to initialize the PluginOuya class! ***");
+		return JNI_ERR;
 	}
 }
 
 // register classes from the JAVA
-int RegisterFromJavaPluginTestGameActivity(JNIEnv* env)
+int RegisterFromJavaPluginTestGameActivity()
 {
-	const char* strPluginJavaClass = "tv/ouya/sdk/PluginTestGameActivity";
-	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Searching for %s... ***", strPluginJavaClass);
+#if ENABLE_VERBOSE_LOGGING
+	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** FAndroidApplication::GetJavaEnv() ***");
+#endif
+	JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
-	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** FAndroidApplication::FindJavaClass() ***");
+	const char* strPluginJavaClass = "tv/ouya/sdk/PluginTestGameActivity";
+#if ENABLE_VERBOSE_LOGGING
+	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Searching for %s... ***", strPluginJavaClass);
+#endif
+
 	jclass jcPluginJavaClass = FAndroidApplication::FindJavaClass(strPluginJavaClass);
 
 	if (jcPluginJavaClass)
 	{
+#if ENABLE_VERBOSE_LOGGING
 		__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Found class %s ***", strPluginJavaClass);
+#endif
 	}
 	else
 	{
@@ -144,7 +185,9 @@ int RegisterFromJavaPluginTestGameActivity(JNIEnv* env)
 	jmethodID jmInit = env->GetStaticMethodID(jcPluginJavaClass, strPluginJavaMethod, "()V");
 	if (jmInit)
 	{
+#if ENABLE_VERBOSE_LOGGING
 		__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Found method %s", strPluginJavaMethod);
+#endif
 	}
 	else
 	{
@@ -152,7 +195,9 @@ int RegisterFromJavaPluginTestGameActivity(JNIEnv* env)
 		return JNI_ERR;
 	}
 
+#if ENABLE_VERBOSE_LOGGING
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Invoking method %s...", strPluginJavaMethod);
+#endif
 	env->CallStaticVoidMethod(jcPluginJavaClass, jmInit);
 	return JNI_OK;
 }
@@ -163,8 +208,9 @@ AndroidPluginTestSetupCallbackAndroidInput GSetupCallbackAndroidInput;
 // define the callback function that will get the android input events
 int32_t AndroidPluginTestHandleRegisterCallbackAndroidInput(struct android_app* app, AInputEvent* event)
 {
-	// check the adb logcat
+#if ENABLE_VERBOSE_LOGGING
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** This indicates a successful test. The callback was invoked! ***");
+#endif
 
 	return 0;
 }

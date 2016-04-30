@@ -38,15 +38,16 @@
 
 namespace tv_ouya_console_api_OuyaController
 {
-	JNIEnv* OuyaController::_env = 0;
 	jclass OuyaController::_jcOuyaController = 0;
 	jmethodID OuyaController::_jmGetButtonData = 0;
 	jmethodID OuyaController::_jmGetControllerByPlayer = 0;
 	jmethodID OuyaController::_jmGetDeviceName = 0;
 	jmethodID OuyaController::_jmShowCursor = 0;
 
-	int OuyaController::InitJNI(JNIEnv* env)
+	int OuyaController::InitJNI()
 	{
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
+
 		{
 			const char* strOuyaControllerClass = "tv/ouya/console/api/OuyaController";
 			if (VERBOSE_LOGGING)
@@ -68,22 +69,17 @@ namespace tv_ouya_console_api_OuyaController
 			}
 		}
 
-		_env = env;
-
 		return JNI_OK;
 	}
 
 	void OuyaController::FindJNI()
 	{
-		{
-			JavaVM* jvm;
-			_env->GetJavaVM(&jvm);
-			jvm->AttachCurrentThread(&_env, 0);
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
+		GJavaVM->AttachCurrentThread(&env, 0);
 
 		{
 			const char* strMethod = "getButtonData";
-			_jmGetButtonData = _env->GetStaticMethodID(_jcOuyaController, strMethod, "(I)Ltv/ouya/console/api/OuyaController$ButtonData;");
+			_jmGetButtonData = env->GetStaticMethodID(_jcOuyaController, strMethod, "(I)Ltv/ouya/console/api/OuyaController$ButtonData;");
 			if (_jmGetButtonData)
 			{
 				if (VERBOSE_LOGGING)
@@ -100,7 +96,7 @@ namespace tv_ouya_console_api_OuyaController
 
 		{
 			const char* strMethod = "getControllerByPlayer";
-			_jmGetControllerByPlayer = _env->GetStaticMethodID(_jcOuyaController, strMethod, "(I)Ltv/ouya/console/api/OuyaController;");
+			_jmGetControllerByPlayer = env->GetStaticMethodID(_jcOuyaController, strMethod, "(I)Ltv/ouya/console/api/OuyaController;");
 			if (_jmGetControllerByPlayer)
 			{
 				if (VERBOSE_LOGGING)
@@ -117,7 +113,7 @@ namespace tv_ouya_console_api_OuyaController
 
 		{
 			const char* strMethod = "getDeviceName";
-			_jmGetDeviceName = _env->GetMethodID(_jcOuyaController, strMethod, "()Ljava/lang/String;");
+			_jmGetDeviceName = env->GetMethodID(_jcOuyaController, strMethod, "()Ljava/lang/String;");
 			if (_jmGetDeviceName)
 			{
 				if (VERBOSE_LOGGING)
@@ -134,7 +130,7 @@ namespace tv_ouya_console_api_OuyaController
 
 		{
 			const char* strMethod = "showCursor";
-			_jmShowCursor = _env->GetStaticMethodID(_jcOuyaController, strMethod, "(Z)V");
+			_jmShowCursor = env->GetStaticMethodID(_jcOuyaController, strMethod, "(Z)V");
 			if (_jmShowCursor)
 			{
 				if (VERBOSE_LOGGING)
@@ -157,15 +153,18 @@ namespace tv_ouya_console_api_OuyaController
 
 	void OuyaController::Dispose()
 	{
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
+
 		if (_instance)
 		{
-			_env->DeleteLocalRef(_instance);
+			env->DeleteLocalRef(_instance);
 			_instance = 0;
 		}
 	}
 
 	OuyaController* OuyaController::getControllerByPlayer(int playerNum)
 	{
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 		FindJNI();
 
 		if (!_jcOuyaController)
@@ -181,7 +180,7 @@ namespace tv_ouya_console_api_OuyaController
 		}
 
 		jint arg1 = playerNum;
-		jobject retVal = _env->CallStaticObjectMethod(_jcOuyaController, _jmGetControllerByPlayer, arg1);
+		jobject retVal = env->CallStaticObjectMethod(_jcOuyaController, _jmGetControllerByPlayer, arg1);
 		if (!retVal)
 		{
 			// May return null if controller isn't connected
@@ -196,6 +195,7 @@ namespace tv_ouya_console_api_OuyaController
 
 	void OuyaController::showCursor(bool visible)
 	{
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 		FindJNI();
 
 		if (!_jcOuyaController)
@@ -210,11 +210,12 @@ namespace tv_ouya_console_api_OuyaController
 			return;
 		}
 
-		_env->CallStaticVoidMethod(_jcOuyaController, _jmShowCursor, visible);
+		env->CallStaticVoidMethod(_jcOuyaController, _jmShowCursor, visible);
 	}
 
 	const std::string& OuyaController::getDeviceName()
 	{
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 		FindJNI();
 
 		_deviceName = "Unavailable";
@@ -231,17 +232,17 @@ namespace tv_ouya_console_api_OuyaController
 			return _deviceName;
 		}
 
-		jstring retVal = (jstring)_env->CallObjectMethod(_instance, _jmGetDeviceName);
+		jstring retVal = (jstring)env->CallObjectMethod(_instance, _jmGetDeviceName);
 		if (!retVal)
 		{
 			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "getDeviceName returned null");
 			return _deviceName;
 		}
 
-		const char* nativeString = _env->GetStringUTFChars(retVal, 0);
+		const char* nativeString = env->GetStringUTFChars(retVal, 0);
 		_deviceName = nativeString;
-		_env->ReleaseStringUTFChars(retVal, nativeString);
-		_env->DeleteLocalRef(retVal);
+		env->ReleaseStringUTFChars(retVal, nativeString);
+		env->DeleteLocalRef(retVal);
 
 		return _deviceName;
 	}

@@ -28,7 +28,7 @@ namespace tv_ouya_console_api_OuyaController
 	class OuyaController
 	{
 	public:
-		static int InitJNI(JNIEnv* env);
+		static int InitJNI();
 		void Dispose();
 
 		static const int BUTTON_O = 96;
@@ -57,7 +57,6 @@ namespace tv_ouya_console_api_OuyaController
 		const std::string& getDeviceName();
 
 	private:
-		static JNIEnv* _env;
 		static jclass _jcOuyaController;
 		static jmethodID _jmGetButtonData;
 		static jmethodID _jmGetControllerByPlayer;
