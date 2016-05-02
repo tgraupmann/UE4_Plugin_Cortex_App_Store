@@ -16,11 +16,10 @@
 
 #pragma once
 
-// this test is Android specific
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include <jni.h>
-
 #include <string>
 
 namespace tv_ouya_console_api_OuyaController

@@ -13,11 +13,19 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#ifndef ECLIPSE
-#include "LaunchPrivatePCH.h"
-#endif
+
+#include "OuyaSDKPluginPrivatePCH.h"
+
+// this test is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_BitmapConfig.h"
+
+// Get a reference to the JNI environment
+#include "../../../Core/Public/Android/AndroidApplication.h"
+
+// Get a reference to the JVM
+#include "../../../Launch/Public/Android/AndroidJNI.h"
 
 #include <android/log.h>
 #include <jni.h>
@@ -34,25 +42,12 @@
 
 namespace android_graphics_Bitmap_Config
 {
-	JavaVM* Config::_jvm = 0;
 	jfieldID Config::_jfARGB_8888 = 0;
 	jclass Config::_jcConfig = 0;
 
-	int Config::InitJNI(JavaVM* jvm)
+	int Config::InitJNI()
 	{
-		_jvm = jvm;
-
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return JNI_ERR;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return JNI_ERR;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		{
 			const char* strClass = "android/graphics/Bitmap$Config";
@@ -80,17 +75,7 @@ namespace android_graphics_Bitmap_Config
 
 	int Config::FindJNI()
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return JNI_ERR;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return JNI_ERR;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		{
 			const char* strField = "ARGB_8888";
@@ -123,14 +108,9 @@ namespace android_graphics_Bitmap_Config
 
 	void Config::Dispose() const
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
-		if (env &&
-			_instance)
+		if (_instance)
 		{
 			env->DeleteGlobalRef(_instance);
 		}
@@ -138,11 +118,7 @@ namespace android_graphics_Bitmap_Config
 
 	Config Config::ARGB_8888()
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return Config(0);
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!_jcConfig) {
 			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "_jcConfig is null");
@@ -167,3 +143,5 @@ namespace android_graphics_Bitmap_Config
 		return Config(globalRef);
 	}
 }
+
+#endif

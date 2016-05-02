@@ -13,9 +13,11 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#ifndef ECLIPSE
-#include "LaunchPrivatePCH.h"
-#endif
+
+#include "OuyaSDKPluginPrivatePCH.h"
+
+// this test is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_CallbacksContentDownload.h"
 #include "OuyaSDK_CallbackSingleton.h"
@@ -35,3 +37,5 @@ void CallbacksContentDownload::OnFailed(const OuyaMod& ouyaMod)
 void CallbacksContentDownload::OnComplete(const OuyaMod& ouyaMod)
 {
 }
+
+#endif

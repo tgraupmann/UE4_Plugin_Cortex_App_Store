@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __ANDROID_GRAPHICS_BITMAP_CONFIG_H__
-#define __ANDROID_GRAPHICS_BITMAP_CONFIG_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include <jni.h>
@@ -26,20 +26,17 @@ namespace android_graphics_Bitmap_Config
 	class Config
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		Config(jobject instance);
 		jobject GetInstance() const;
 		void Dispose() const;
 		static Config ARGB_8888();
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcConfig;
 		static jfieldID _jfARGB_8888;
 		jobject _instance;
 	};
 }
-
-#endif
 
 #endif

@@ -13,12 +13,20 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#ifndef ECLIPSE
-#include "LaunchPrivatePCH.h"
-#endif
+
+#include "OuyaSDKPluginPrivatePCH.h"
+
+// this test is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_OuyaContent.h"
 #include "OuyaSDK_OuyaMod.h"
+
+// Get a reference to the JNI environment
+#include "../../../Core/Public/Android/AndroidApplication.h"
+
+// Get a reference to the JVM
+#include "../../../Launch/Public/Android/AndroidJNI.h"
 
 #include <android/log.h>
 #include <jni.h>
@@ -37,27 +45,14 @@ using namespace tv_ouya_console_api_content_OuyaMod;
 
 namespace tv_ouya_console_api_content_OuyaContent
 {
-	JavaVM* OuyaContent::_jvm = 0;
 	jclass OuyaContent::_jcOuyaContent = 0;
 	jmethodID OuyaContent::_jmCreate = 0;
 	jmethodID OuyaContent::_jmGetInstance = 0;
 	jmethodID OuyaContent::_jmIsInitialized = 0;
 
-	int OuyaContent::InitJNI(JavaVM* jvm)
+	int OuyaContent::InitJNI()
 	{
-		_jvm = jvm;
-
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return JNI_ERR;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return JNI_ERR;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		{
 			const char* strClass = "tv/ouya/console/api/content/OuyaContent";
@@ -85,17 +80,7 @@ namespace tv_ouya_console_api_content_OuyaContent
 
 	int OuyaContent::FindJNI()
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return JNI_ERR;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return JNI_ERR;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		{
 			const char* strMethod = "create";
@@ -162,14 +147,9 @@ namespace tv_ouya_console_api_content_OuyaContent
 
 	void OuyaContent::Dispose() const
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
-		if (env &&
-			_instance)
+		if (_instance)
 		{
 			env->DeleteGlobalRef(_instance);
 		}
@@ -177,11 +157,7 @@ namespace tv_ouya_console_api_content_OuyaContent
 
 	OuyaContent OuyaContent::getInstance()
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return OuyaContent::CreateObject(0);
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!_jcOuyaContent)
 		{
@@ -210,11 +186,7 @@ namespace tv_ouya_console_api_content_OuyaContent
 
 	OuyaMod OuyaContent::create()
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return OuyaMod::CreateObject(0);
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!_instance)
 		{
@@ -243,11 +215,7 @@ namespace tv_ouya_console_api_content_OuyaContent
 
 	bool OuyaContent::isInitialized() const
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return false;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!_instance)
 		{
@@ -265,3 +233,5 @@ namespace tv_ouya_console_api_content_OuyaContent
 		return result;
 	}
 }
+
+#endif

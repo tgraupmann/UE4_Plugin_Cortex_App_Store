@@ -14,21 +14,23 @@
 * limitations under the License.
 */
 
-#ifndef __TV_OUYA_SDK_OUYA_INPUT_VIEW_H__
-#define __TV_OUYA_SDK_OUYA_INPUT_VIEW_H__
+#pragma once
+
+// this code is Android specific
+#if PLATFORM_ANDROID
 
 #include <jni.h>
 #include <map>
 #include <vector>
 
-class AInputEvent;
+struct AInputEvent;
 
 namespace tv_ouya_sdk_OuyaInputView
 {
 	class OuyaInputView
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static void JNIFind();
 
 		static OuyaInputView* getInstance();
@@ -108,7 +110,6 @@ namespace tv_ouya_sdk_OuyaInputView
 		void clearButtons();
 
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcOuyaInputView;
 		static jmethodID _jmGetInstance;
 		static jmethodID _jmJavaDispatchKeyEvent;

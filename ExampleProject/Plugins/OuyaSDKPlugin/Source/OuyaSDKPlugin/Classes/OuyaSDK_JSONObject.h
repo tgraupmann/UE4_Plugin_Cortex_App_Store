@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __ORG_JSON_JSONOBJECT_JSONOBJECT_H__
-#define __ORG_JSON_JSONOBJECT_JSONOBJECT_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include <jni.h>
@@ -32,7 +32,7 @@ namespace org_json_JSONObject
 	class JSONObject
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		JSONObject();
 		JSONObject(jobject jsonObject);
@@ -48,7 +48,6 @@ namespace org_json_JSONObject
 		JSONObject put(const std::string& name, const std::string& value) const;
 		std::string toString() const;
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcJsonObject;
 		static jmethodID _mConstruct;
 		static jmethodID _mConstruct2;
@@ -63,7 +62,5 @@ namespace org_json_JSONObject
 		jobject _instance;
 	};
 }
-
-#endif
 
 #endif

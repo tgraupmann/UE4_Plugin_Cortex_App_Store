@@ -13,11 +13,19 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#ifndef ECLIPSE
-#include "LaunchPrivatePCH.h"
-#endif
+
+#include "OuyaSDKPluginPrivatePCH.h"
+
+// this test is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_InputStream.h"
+
+// Get a reference to the JNI environment
+#include "../../../Core/Public/Android/AndroidApplication.h"
+
+// Get a reference to the JVM
+#include "../../../Launch/Public/Android/AndroidJNI.h"
 
 #include <android/log.h>
 #include <jni.h>
@@ -34,26 +42,13 @@
 
 namespace java_io_InputStream
 {
-	JavaVM* InputStream::_jvm = 0;
 	jclass InputStream::_jcInputStream = 0;
 	jmethodID InputStream::_jmClose = 0;
 	jmethodID InputStream::_jmRead = 0;
 
-	int InputStream::InitJNI(JavaVM* jvm)
+	int InputStream::InitJNI()
 	{
-		_jvm = jvm;
-
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return JNI_ERR;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return JNI_ERR;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		{
 			const char* strClass = "java/io/InputStream";
@@ -81,17 +76,7 @@ namespace java_io_InputStream
 
 	int InputStream::FindJNI()
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return JNI_ERR;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return JNI_ERR;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		{
 			const char* strMethod = "close";
@@ -140,14 +125,9 @@ namespace java_io_InputStream
 
 	void InputStream::Dispose() const
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
-		if (env &&
-			_instance)
+		if (_instance)
 		{
 			env->DeleteGlobalRef(_instance);
 		}
@@ -157,17 +137,7 @@ namespace java_io_InputStream
 	{
 		FindJNI();
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!_instance) {
 			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "_instance is null");
@@ -207,17 +177,7 @@ namespace java_io_InputStream
 		__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "buffer is valid");
 #endif
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return 0;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return 0;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 #if ENABLE_VERBOSE_LOGGING
 		__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "env is valid");
@@ -275,3 +235,5 @@ namespace java_io_InputStream
 		return bytesRead;
 	}
 }
+
+#endif

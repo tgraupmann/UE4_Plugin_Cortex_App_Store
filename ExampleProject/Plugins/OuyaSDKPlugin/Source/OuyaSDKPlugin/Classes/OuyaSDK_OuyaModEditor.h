@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __TV_OUYA_CONSOLE_API_CONTENT_OUYAMODEDITOR_H__
-#define __TV_OUYA_CONSOLE_API_CONTENT_OUYAMODEDITOR_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include "OuyaSDK_Bitmap.h"
@@ -31,7 +31,7 @@ namespace tv_ouya_console_api_content_OuyaModEditor
 	class OuyaModEditor
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		static const OuyaModEditor CreateObject(jobject instance);
 		jobject GetInstance() const;
@@ -47,7 +47,6 @@ namespace tv_ouya_console_api_content_OuyaModEditor
 		void setMetadata(const std::string& metadata) const;
 		void setTitle(const std::string& title) const;
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcOuyaModEditor;
 		static jmethodID _jmAddScreenshot;
 		static jmethodID _jmAddTag;
@@ -62,7 +61,5 @@ namespace tv_ouya_console_api_content_OuyaModEditor
 		jobject _instance;
 	};
 }
-
-#endif
 
 #endif

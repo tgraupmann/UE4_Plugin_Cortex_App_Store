@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __ORG_JSON_JSONARRAY_JSONARRAY_H__
-#define __ORG_JSON_JSONARRAY_JSONARRAY_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include <jni.h>
@@ -32,7 +32,7 @@ namespace org_json_JSONArray
 	class JSONArray
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		JSONArray();
 		JSONArray(jobject jsonArray);
@@ -48,7 +48,6 @@ namespace org_json_JSONArray
 		std::string toString() const;
 
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcJsonArray;
 		static jmethodID _mConstruct;
 		static jmethodID _mConstruct2;
@@ -61,7 +60,5 @@ namespace org_json_JSONArray
 		jobject _instance;
 	};
 }
-
-#endif
 
 #endif

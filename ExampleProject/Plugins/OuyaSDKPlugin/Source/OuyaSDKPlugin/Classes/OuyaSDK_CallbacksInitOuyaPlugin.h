@@ -14,8 +14,10 @@
 * limitations under the License.
 */
 
-#ifndef __CALLBACKS_INIT_OUYA_PLUGIN_H__
-#define __CALLBACKS_INIT_OUYA_PLUGIN_H__
+#pragma once
+
+// this code is Android specific
+#if PLATFORM_ANDROID
 
 #include <string>
 

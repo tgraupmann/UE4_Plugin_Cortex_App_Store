@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef ECLIPSE
-#include "LaunchPrivatePCH.h"
-#endif
+
+#include "OuyaSDKPluginPrivatePCH.h"
+
+// this test is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_Bundle.h"
 #include "OuyaSDK_CallbackSingleton.h"
@@ -833,19 +835,8 @@ JNINativeMethod g_nativeCallbacksContentSearchPublishedOnResults;
 JNINativeMethod g_nativeCallbacksContentUnpublishOnError;
 JNINativeMethod g_nativeCallbacksContentUnpublishOnSuccess;
 
-int CallbackSingleton::InitJNI(JavaVM* jvm) {
-JNIEnv* env;
-if (jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-	__android_log_print(ANDROID_LOG_ERROR, LOG_TAG,
-			"Failed to get JNI environment!");
-	return JNI_ERR;
-}
-
-if (!env) {
-	__android_log_print(ANDROID_LOG_ERROR, LOG_TAG,
-			"JNI must be initialized with a valid environment!");
-	return JNI_ERR;
-}
+int CallbackSingleton::InitJNI() {
+	JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 //
 // Register Native Callbacks for InitOuyaPlugin
@@ -1077,3 +1068,5 @@ RegisterNativeMethod(env, "CallbacksContentUnpublishOnSuccess",
 return JNI_OK;
 }
 }
+
+#endif

@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __ANDROID_GRAPHICS_BITMAP_H__
-#define __ANDROID_GRAPHICS_BITMAP_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include "OuyaSDK_BitmapConfig.h"
@@ -28,7 +28,7 @@ namespace android_graphics_Bitmap
 	class Bitmap
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		Bitmap(jobject instance);
 		jobject GetInstance() const;
@@ -40,7 +40,6 @@ namespace android_graphics_Bitmap
 		void setPixel(int x, int y, int color) const;
 		void setPixels(int* pixels, int offset, int stride, int x, int y, int width, int height) const;
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcBitmap;
 		static jmethodID _jmCreateBitmap;
 		static jmethodID _jmGetHeight;
@@ -51,7 +50,5 @@ namespace android_graphics_Bitmap
 		jobject _instance;
 	};
 }
-
-#endif
 
 #endif

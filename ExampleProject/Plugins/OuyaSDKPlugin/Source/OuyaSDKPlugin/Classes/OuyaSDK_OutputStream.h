@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __JAVA_IO_OUTPUTSTREAM_H__
-#define __JAVA_IO_OUTPUTSTREAM_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include <jni.h>
@@ -26,7 +26,7 @@ namespace java_io_OutputStream
 	class OutputStream
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		OutputStream(jobject instance);
 		jobject GetInstance() const;
@@ -35,7 +35,6 @@ namespace java_io_OutputStream
 		void write(signed char buffer[], int length) const;
 		void flush() const;
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcOutputStream;
 		static jmethodID _jmClose;
 		static jmethodID _jmFlush;
@@ -43,7 +42,5 @@ namespace java_io_OutputStream
 		jobject _instance;
 	};
 }
-
-#endif
 
 #endif

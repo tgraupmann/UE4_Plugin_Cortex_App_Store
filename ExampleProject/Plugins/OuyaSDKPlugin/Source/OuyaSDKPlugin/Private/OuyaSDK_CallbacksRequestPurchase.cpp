@@ -13,9 +13,11 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#ifndef ECLIPSE
-#include "LaunchPrivatePCH.h"
-#endif
+
+#include "OuyaSDKPluginPrivatePCH.h"
+
+// this test is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_CallbacksRequestPurchase.h"
 #include "OuyaSDK_CallbackSingleton.h"
@@ -33,3 +35,5 @@ void CallbacksRequestPurchase::OnFailure(int errorCode, const std::string& error
 void CallbacksRequestPurchase::OnCancel()
 {
 }
+
+#endif

@@ -13,11 +13,19 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#ifndef ECLIPSE
-#include "LaunchPrivatePCH.h"
-#endif
+
+#include "OuyaSDKPluginPrivatePCH.h"
+
+// this test is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_OuyaInputView.h"
+
+// Get a reference to the JNI environment
+#include "../../../Core/Public/Android/AndroidApplication.h"
+
+// Get a reference to the JVM
+#include "../../../Launch/Public/Android/AndroidJNI.h"
 
 #include <android/log.h>
 #include <android_native_app_glue.h>
@@ -40,7 +48,6 @@
 
 namespace tv_ouya_sdk_OuyaInputView
 {
-	JavaVM* OuyaInputView::_jvm = 0;
 	jclass OuyaInputView::_jcOuyaInputView = 0;
 	jmethodID OuyaInputView::_jmGetInstance = 0;
 	jmethodID OuyaInputView::_jmJavaDispatchKeyEvent = 0;
@@ -65,15 +72,9 @@ namespace tv_ouya_sdk_OuyaInputView
 	std::vector< std::map<int, bool> > OuyaInputView::_lastButtonDown;
 	std::vector< std::map<int, bool> > OuyaInputView::_lastButtonUp;
 
-	int OuyaInputView::InitJNI(JavaVM* jvm)
+	int OuyaInputView::InitJNI()
 	{
-		_jvm = jvm;
-
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return JNI_ERR;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		{
 			const char* strClass = "tv/ouya/sdk/OuyaInputView";
@@ -133,17 +134,7 @@ namespace tv_ouya_sdk_OuyaInputView
 
 	void OuyaInputView::JNIFind()
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!_jcOuyaInputView)
 		{
@@ -207,17 +198,7 @@ namespace tv_ouya_sdk_OuyaInputView
 
 	OuyaInputView* OuyaInputView::getInstance()
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return 0;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return 0;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!_jcOuyaInputView)
 		{
@@ -415,17 +396,7 @@ namespace tv_ouya_sdk_OuyaInputView
 	bool OuyaInputView::javaDispatchKeyEvent(long long downTime, long long eventTime, int action, int code,
 		int repeat, int metaState, int deviceId, int scancode, int flags, int source)
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return false;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return false;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!_instance)
 		{
@@ -472,17 +443,7 @@ namespace tv_ouya_sdk_OuyaInputView
 		int* axisIndexes,
 		float* axisValues)
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return false;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return false;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!_instance)
 		{
@@ -731,3 +692,5 @@ namespace tv_ouya_sdk_OuyaInputView
 	}
 
 }
+
+#endif

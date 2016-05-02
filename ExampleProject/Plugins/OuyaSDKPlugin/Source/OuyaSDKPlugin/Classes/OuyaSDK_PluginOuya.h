@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __PLUGIN_OUYA_H__
-#define __PLUGIN_OUYA_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include "OuyaSDK_Bitmap.h"
@@ -48,7 +48,7 @@ namespace OuyaSDK
 	{
 	public:
 
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 
 		void AsyncInitOuyaPlugin(const std::string& jsonData, CallbacksInitOuyaPlugin* callbacks);
 
@@ -95,7 +95,6 @@ namespace OuyaSDK
 	private:
 
 		// cached references
-		static JavaVM* _jvm;
 		static jclass jc_IUnrealOuyaActivity;
 		static jclass jc_UnrealOuyaPlugin;
 		static jclass jc_AsyncCppInitOuyaPlugin;
@@ -106,7 +105,5 @@ namespace OuyaSDK
 		static jclass jc_AsyncCppOuyaContentInit;
 	};
 }
-
-#endif
 
 #endif

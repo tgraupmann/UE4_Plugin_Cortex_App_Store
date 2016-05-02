@@ -13,7 +13,7 @@
 // Get a reference to the JNI environment
 #include "../../../Core/Public/Android/AndroidApplication.h"
 
-// The JNI_OnLoad callback is defined in the JNI code
+// Get a reference to the JVM
 #include "../../../Launch/Public/Android/AndroidJNI.h"
 
 // The Android Input callback is defined in the launcher code
@@ -152,6 +152,7 @@ int RegisterJavaPluginClasses()
 		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to initialize the PluginOuya class! ***");
 		return JNI_ERR;
 	}
+	return JNI_OK;
 }
 
 // register classes from the JAVA

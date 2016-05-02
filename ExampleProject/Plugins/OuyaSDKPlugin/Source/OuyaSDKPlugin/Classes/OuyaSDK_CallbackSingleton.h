@@ -14,8 +14,10 @@
 * limitations under the License.
 */
 
-#ifndef __CALLBACK_SINGLETON_H__
-#define __CALLBACK_SINGLETON_H__
+#pragma once
+
+// this code is Android specific
+#if PLATFORM_ANDROID
 
 #include <jni.h>
 #include <string>
@@ -46,7 +48,7 @@ namespace OuyaSDK
 
 	public:
 
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 
 		static CallbackSingleton* GetInstance();
 

@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __TV_OUYA_CONSOLE_API_CONTENT_OUYACONTENT_H__
-#define __TV_OUYA_CONSOLE_API_CONTENT_OUYACONTENT_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include "OuyaSDK_OuyaMod.h"
@@ -28,7 +28,7 @@ namespace tv_ouya_console_api_content_OuyaContent
 	class OuyaContent
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		static OuyaContent CreateObject(jobject instance);
 		jobject GetInstance() const;
@@ -38,7 +38,6 @@ namespace tv_ouya_console_api_content_OuyaContent
 		tv_ouya_console_api_content_OuyaMod::OuyaMod create();
 		bool isInitialized() const;
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcOuyaContent;
 		static jmethodID _jmCreate;
 		static jmethodID _jmGetInstance;
@@ -46,7 +45,5 @@ namespace tv_ouya_console_api_content_OuyaContent
 		jobject _instance;
 	};
 }
-
-#endif
 
 #endif

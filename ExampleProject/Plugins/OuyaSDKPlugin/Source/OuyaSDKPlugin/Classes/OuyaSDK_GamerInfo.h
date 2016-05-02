@@ -14,8 +14,10 @@
 * limitations under the License.
 */
 
-#ifndef __GAMER_INFO_H__
-#define __GAMER_INFO_H__
+#pragma once
+
+// this code is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_JsonObject.h"
 
@@ -30,9 +32,7 @@ namespace OuyaSDK
 		std::string Uuid;
 
 		void Init();
-#if defined(ANDROID)
 		void ParseJSON(const org_json_JSONObject::JSONObject& jsonObject);
-#endif
 	};
 }
 

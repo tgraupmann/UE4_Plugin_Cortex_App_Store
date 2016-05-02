@@ -15,13 +15,17 @@
 */
 
 #include "OuyaSDKPluginPrivatePCH.h"
-#include "OuyaSDK_OuyaController.h"
 
 // this test is Android specific
 #if PLATFORM_ANDROID
 
+#include "OuyaSDK_OuyaController.h"
+
 // Get a reference to the JNI environment
 #include "../../../Core/Public/Android/AndroidApplication.h"
+
+// Get a reference to the JVM
+#include "../../../Launch/Public/Android/AndroidJNI.h"
 
 #include <android/log.h>
 #include <jni.h>

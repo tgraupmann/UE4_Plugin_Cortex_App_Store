@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __ANDROID_OS_BUNDLE_H__
-#define __ANDROID_OS_BUNDLE_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include <jni.h>
@@ -26,18 +26,15 @@ namespace android_os_Bundle
 	class Bundle
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		Bundle(jobject instance);
 		jobject GetInstance() const;
 		void Dispose() const;
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcBundle;
 		jobject _instance;
 	};
 }
-
-#endif
 
 #endif

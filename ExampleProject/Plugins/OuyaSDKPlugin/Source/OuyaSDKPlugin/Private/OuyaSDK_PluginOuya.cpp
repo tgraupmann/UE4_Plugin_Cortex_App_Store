@@ -13,9 +13,11 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#ifndef ECLIPSE
-#include "LaunchPrivatePCH.h"
-#endif
+
+#include "OuyaSDKPluginPrivatePCH.h"
+
+// this test is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_Bitmap.h"
 #include "OuyaSDK_BitmapConfig.h"
@@ -32,6 +34,12 @@
 #include "OuyaSDK_OutputStream.h"
 #include "OuyaSDK_PluginOuya.h"
 #include "OuyaSDK_String.h"
+
+// Get a reference to the JNI environment
+#include "../../../Core/Public/Android/AndroidApplication.h"
+
+// Get a reference to the JVM
+#include "../../../Launch/Public/Android/AndroidJNI.h"
 
 #include <jni.h>
 #include <android/log.h>
@@ -75,7 +83,6 @@ using namespace tv_ouya_console_api_content_OuyaModScreenshot;
 
 namespace OuyaSDK
 {
-	JavaVM* PluginOuya::_jvm = 0;
 	jclass PluginOuya::jc_IUnrealOuyaActivity = 0;
 	jclass PluginOuya::jc_UnrealOuyaPlugin = 0;
 	jclass PluginOuya::jc_AsyncCppInitOuyaPlugin = 0;
@@ -85,15 +92,9 @@ namespace OuyaSDK
 	jclass PluginOuya::jc_AsyncCppOuyaRequestReceipts = 0;
 	jclass PluginOuya::jc_AsyncCppOuyaContentInit = 0;
 
-	int PluginOuya::InitJNI(JavaVM* jvm)
+	int PluginOuya::InitJNI()
 	{
-		_jvm = jvm;
-
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return JNI_ERR;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		{
 			const char* strClass = "tv/ouya/sdk/unreal/IUnrealOuyaActivity";
@@ -263,72 +264,72 @@ namespace OuyaSDK
 			}
 		}
 
-		if (Bitmap::InitJNI(jvm) == JNI_ERR)
+		if (Bitmap::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (Bundle::InitJNI(jvm) == JNI_ERR)
+		if (Bundle::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (CallbackSingleton::InitJNI(jvm) == JNI_ERR)
+		if (CallbackSingleton::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (Color::InitJNI(jvm) == JNI_ERR)
+		if (Color::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (Config::InitJNI(jvm) == JNI_ERR)
+		if (Config::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (InputStream::InitJNI(jvm) == JNI_ERR)
+		if (InputStream::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (JSONArray::InitJNI(jvm) == JNI_ERR)
+		if (JSONArray::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (JSONObject::InitJNI(jvm) == JNI_ERR)
+		if (JSONObject::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (OutputStream::InitJNI(jvm) == JNI_ERR)
+		if (OutputStream::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (OuyaContent::InitJNI(jvm) == JNI_ERR)
+		if (OuyaContent::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (OuyaMod::InitJNI(jvm) == JNI_ERR)
+		if (OuyaMod::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (OuyaModEditor::InitJNI(jvm) == JNI_ERR)
+		if (OuyaModEditor::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (OuyaModScreenshot::InitJNI(jvm) == JNI_ERR)
+		if (OuyaModScreenshot::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
 
-		if (java_lang_String::String::InitJNI(jvm) == JNI_ERR)
+		if (java_lang_String::String::InitJNI() == JNI_ERR)
 		{
 			return JNI_ERR;
 		}
@@ -344,17 +345,7 @@ namespace OuyaSDK
 
 		CallbackSingleton::GetInstance()->m_callbacksInitOuyaPlugin = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!jc_AsyncCppInitOuyaPlugin)
 		{
@@ -402,17 +393,7 @@ namespace OuyaSDK
 
 		CallbackSingleton::GetInstance()->m_callbacksRequestGamerInfo = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		//LOGI("get the invoke method");
 		jmethodID invokeMethod = env->GetStaticMethodID(jc_AsyncCppOuyaRequestGamerInfo, "invoke", "()V");
@@ -429,17 +410,7 @@ namespace OuyaSDK
 
 		CallbackSingleton::GetInstance()->m_callbacksRequestProducts = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		//LOGI("get string class");
 
@@ -470,17 +441,7 @@ namespace OuyaSDK
 
 		CallbackSingleton::GetInstance()->m_callbacksRequestPurchase = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		//LOGI("Allocate purchasable String");
 		jstring purchasableString = env->NewStringUTF(purchasable.c_str());
@@ -501,17 +462,7 @@ namespace OuyaSDK
 
 		CallbackSingleton::GetInstance()->m_callbacksRequestReceipts = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		//LOGI("get the invoke method");
 		jmethodID invokeMethod = env->GetStaticMethodID(jc_AsyncCppOuyaRequestReceipts, "invoke", "()V");
@@ -528,17 +479,7 @@ namespace OuyaSDK
 
 		CallbackSingleton::GetInstance()->m_callbacksContentInit = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		//LOGI("get the invoke method");
 		jmethodID invokeMethod = env->GetStaticMethodID(jc_AsyncCppOuyaContentInit, "invoke", "()V");
@@ -551,17 +492,7 @@ namespace OuyaSDK
 
 	bool PluginOuya::updateSafeArea(float amount)
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return false;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return false;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		jmethodID method;
 
@@ -586,17 +517,7 @@ namespace OuyaSDK
 
 	bool PluginOuya::shutdown()
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return false;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return false;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		jmethodID method;
 
@@ -621,17 +542,7 @@ namespace OuyaSDK
 
 	void PluginOuya::InitializeContent()
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		jmethodID method;
 
@@ -658,17 +569,7 @@ namespace OuyaSDK
 	{
 		CallbackSingleton::GetInstance()->m_callbacksContentDelete = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		jmethodID method;
 
@@ -695,17 +596,7 @@ namespace OuyaSDK
 	{
 		CallbackSingleton::GetInstance()->m_callbacksContentDownload = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		jmethodID method;
 
@@ -732,17 +623,7 @@ namespace OuyaSDK
 	{
 		CallbackSingleton::GetInstance()->m_callbacksContentPublish = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		jmethodID method;
 
@@ -769,17 +650,7 @@ namespace OuyaSDK
 	{
 		CallbackSingleton::GetInstance()->m_callbacksContentUnpublish = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		jmethodID method;
 
@@ -808,17 +679,7 @@ namespace OuyaSDK
 	{
 		CallbackSingleton::GetInstance()->m_callbacksContentSave = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		jmethodID method;
 
@@ -845,17 +706,7 @@ namespace OuyaSDK
 	{
 		CallbackSingleton::GetInstance()->m_callbacksContentSearchInstalled = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		jmethodID method;
 
@@ -882,17 +733,7 @@ namespace OuyaSDK
 	{
 		CallbackSingleton::GetInstance()->m_callbacksContentSearchPublished = callbacks;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return;
-		}
-
-		if (!env)
-		{
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "JNI must be initialized with a valid environment!");
-			return;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		jmethodID method;
 
@@ -919,11 +760,7 @@ namespace OuyaSDK
 
 	float PluginOuya::getFloat(jobject fFloat)
 	{
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return 0;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!jc_UnrealOuyaPlugin)
 		{
@@ -962,11 +799,7 @@ namespace OuyaSDK
 	{
 		vector<Bitmap> results;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return results;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!jc_UnrealOuyaPlugin)
 		{
@@ -1029,11 +862,7 @@ namespace OuyaSDK
 	{
 		vector<OuyaModScreenshot> results;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return results;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!jc_UnrealOuyaPlugin)
 		{
@@ -1096,11 +925,7 @@ namespace OuyaSDK
 	{
 		vector<string> results;
 
-		JNIEnv* env;
-		if (_jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "Failed to get JNI environment!");
-			return results;
-		}
+		JNIEnv* env = FAndroidApplication::GetJavaEnv();
 
 		if (!jc_UnrealOuyaPlugin)
 		{
@@ -1154,3 +979,5 @@ namespace OuyaSDK
 		return results;
 	}
 }
+
+#endif

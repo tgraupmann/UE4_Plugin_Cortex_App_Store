@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __TV_OUYA_CONSOLE_API_CONTENT_OUYAMODSCREENSHOT_H__
-#define __TV_OUYA_CONSOLE_API_CONTENT_OUYAMODSCREENSHOT_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include "OuyaSDK_Bitmap.h"
@@ -28,7 +28,7 @@ namespace tv_ouya_console_api_content_OuyaModScreenshot
 	class OuyaModScreenshot
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		static const OuyaModScreenshot CreateObject(jobject instance);
 		jobject GetInstance() const;
@@ -36,12 +36,9 @@ namespace tv_ouya_console_api_content_OuyaModScreenshot
 		android_graphics_Bitmap::Bitmap getImage() const;
 		android_graphics_Bitmap::Bitmap getThumbnail() const;
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcOuyaModScreenshot;
 		jobject _instance;
 	};
 }
-
-#endif
 
 #endif

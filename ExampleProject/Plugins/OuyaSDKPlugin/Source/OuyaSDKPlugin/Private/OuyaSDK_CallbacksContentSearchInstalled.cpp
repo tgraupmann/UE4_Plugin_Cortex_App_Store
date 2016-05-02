@@ -13,9 +13,11 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#ifndef ECLIPSE
-#include "LaunchPrivatePCH.h"
-#endif
+
+#include "OuyaSDKPluginPrivatePCH.h"
+
+// this test is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_CallbacksContentSearchInstalled.h"
 #include "OuyaSDK_CallbackSingleton.h"
@@ -31,3 +33,5 @@ void CallbacksContentSearchInstalled::OnError(int code, const std::string& reaso
 void CallbacksContentSearchInstalled::OnResults(const std::vector<tv_ouya_console_api_content_OuyaMod::OuyaMod> ouyaMods, int count)
 {
 }
+
+#endif

@@ -14,8 +14,10 @@
 * limitations under the License.
 */
 
-#ifndef __CALLBACKS_REQUEST_GAMER_INFO_H__
-#define __CALLBACKS_REQUEST_GAMER_INFO_H__
+#pragma once
+
+// this code is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_GamerInfo.h"
 

@@ -13,9 +13,11 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#ifndef ECLIPSE
-#include "LaunchPrivatePCH.h"
-#endif
+
+#include "OuyaSDKPluginPrivatePCH.h"
+
+// this test is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_Receipt.h"
 #include "OuyaSDK_JSONObject.h"
@@ -37,7 +39,6 @@ namespace OuyaSDK
 		PriceInCents = 0;
 	}
 
-#if defined(ANDROID)
 	void Receipt::ParseJSON(const org_json_JSONObject::JSONObject& jsonObject)
 	{
 		std::string field;
@@ -90,5 +91,6 @@ namespace OuyaSDK
 			PriceInCents = jsonObject.getInt(field);
 		}
 	}
-#endif
 }
+
+#endif

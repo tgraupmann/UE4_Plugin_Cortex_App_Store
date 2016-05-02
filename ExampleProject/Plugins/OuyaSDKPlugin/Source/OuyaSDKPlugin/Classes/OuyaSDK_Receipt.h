@@ -14,8 +14,10 @@
 * limitations under the License.
 */
 
-#ifndef __RECEIPT_H__
-#define __RECEIPT_H__
+#pragma once
+
+// this code is Android specific
+#if PLATFORM_ANDROID
 
 #include "OuyaSDK_JsonObject.h"
 
@@ -36,9 +38,7 @@ namespace OuyaSDK
 		int PriceInCents;
 
 		void Init();
-#if defined(ANDROID)
 		void ParseJSON(const org_json_JSONObject::JSONObject& jsonObject);
-#endif
 	};
 }
 

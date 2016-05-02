@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __CALLBACKS_CONTENT_INIT_H__
-#define __CALLBACKS_CONTENT_INIT_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 class CallbacksContentInit
@@ -27,7 +27,5 @@ public:
 
 	virtual void OnDestroyed();
 };
-
-#endif
 
 #endif

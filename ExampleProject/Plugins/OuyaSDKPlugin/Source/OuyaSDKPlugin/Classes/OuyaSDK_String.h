@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __JAVA_LANG_STRING_H__
-#define __JAVA_LANG_STRING_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include <string>
@@ -28,7 +28,7 @@ namespace java_lang_String
 	class String
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		String(const std::string& val);
 		String(jstring instance);
@@ -36,13 +36,10 @@ namespace java_lang_String
 		void Dispose() const;
 		int* getBytes(int& length) const;
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcString;
 		static jmethodID _jmGetBytes;
 		jstring _instance;
 	};
 }
-
-#endif
 
 #endif

@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __TV_OUYA_CONSOLE_API_CONTENT_OUYAMOD_H__
-#define __TV_OUYA_CONSOLE_API_CONTENT_OUYAMOD_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include "OuyaSDK_InputStream.h"
@@ -33,7 +33,7 @@ namespace tv_ouya_console_api_content_OuyaMod
 	class OuyaMod
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		static const OuyaMod CreateObject(jobject instance);
 		jobject GetInstance() const;
@@ -57,7 +57,6 @@ namespace tv_ouya_console_api_content_OuyaMod
 		java_io_InputStream::InputStream openFile(const std::string& filename) const;
 		void rate() const;
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcOuyaMod;
 		static jmethodID _jmEdit;
 		static jmethodID _jmFlag;
@@ -80,7 +79,5 @@ namespace tv_ouya_console_api_content_OuyaMod
 		jobject _instance;
 	};
 }
-
-#endif
 
 #endif

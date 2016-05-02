@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __CALLBACKS_CONTENT_SAVE_H__
-#define __CALLBACKS_CONTENT_SAVE_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include "OuyaSDK_OuyaMod.h"
@@ -32,7 +32,5 @@ public:
 
 	virtual void OnSuccess(tv_ouya_console_api_content_OuyaMod::OuyaMod ouyaMod);
 };
-
-#endif
 
 #endif

@@ -14,9 +14,9 @@
 * limitations under the License.
 */
 
-#ifndef __JAVA_IO_INPUTSTREAM_H__
-#define __JAVA_IO_INPUTSTREAM_H__
+#pragma once
 
+// this code is Android specific
 #if PLATFORM_ANDROID
 
 #include <jni.h>
@@ -26,7 +26,7 @@ namespace java_io_InputStream
 	class InputStream
 	{
 	public:
-		static int InitJNI(JavaVM* jvm);
+		static int InitJNI();
 		static int FindJNI();
 		InputStream(jobject instance);
 		jobject GetInstance() const;
@@ -34,14 +34,11 @@ namespace java_io_InputStream
 		void close() const;
 		int read(signed char buffer[], int length) const;
 	private:
-		static JavaVM* _jvm;
 		static jclass _jcInputStream;
 		static jmethodID _jmClose;
 		static jmethodID _jmRead;
 		jobject _instance;
 	};
 }
-
-#endif
 
 #endif
