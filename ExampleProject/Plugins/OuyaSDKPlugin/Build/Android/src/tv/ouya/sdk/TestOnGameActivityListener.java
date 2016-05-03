@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import com.epicgames.ue4.GameActivity;
+import tv.ouya.sdk.OuyaInputView;
+import tv.ouya.sdk.unreal.IUnrealOuyaActivity;
 
 public class TestOnGameActivityListener implements GameActivity.OnGameActivityListener {
 

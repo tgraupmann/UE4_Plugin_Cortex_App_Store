@@ -9,8 +9,32 @@
 	<!-- optional files or directories to copy to Intermediate/Android/APK -->
 	<resourceCopies>
 		<copyFile src="$S(PluginDir)/../../Build/Android/libs/ouya-sdk.jar" dst="$S(BuildDir)/libs/ouya-sdk.jar" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/DebugInput.java" dst="$S(BuildDir)/src/tv/ouya/sdk/DebugInput.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/OuyaInputView.java" dst="$S(BuildDir)/src/tv/ouya/sdk/OuyaInputView.java" />
 		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/PluginTestGameActivity.java" dst="$S(BuildDir)/src/tv/ouya/sdk/PluginTestGameActivity.java" />
 		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/TestOnGameActivityListener.java" dst="$S(BuildDir)/src/tv/ouya/sdk/TestOnGameActivityListener.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/AsyncCppInitOuyaPlugin.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/AsyncCppInitOuyaPlugin.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/AsyncCppOuyaContentInit.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/AsyncCppOuyaContentInit.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/AsyncCppOuyaRequestGamerInfo.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/AsyncCppOuyaRequestGamerInfo.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/AsyncCppOuyaRequestProducts.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/AsyncCppOuyaRequestProducts.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/AsyncCppOuyaRequestPurchase.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/AsyncCppOuyaRequestPurchase.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/AsyncCppOuyaRequestReceipts.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/AsyncCppOuyaRequestReceipts.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksContentDelete.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksContentDelete.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksContentDownload.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksContentDownload.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksContentInit.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksContentInit.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksContentPublish.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksContentPublish.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksContentSave.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksContentSave.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksContentSearchInstalled.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksContentSearchInstalled.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksContentSearchPublished.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksContentSearchPublished.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksContentUnpublish.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksContentUnpublish.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksInitOuyaPlugin.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksInitOuyaPlugin.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksRequestGamerInfo.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksRequestGamerInfo.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksRequestProducts.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksRequestProducts.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksRequestPurchase.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksRequestPurchase.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/CallbacksRequestReceipts.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/CallbacksRequestReceipts.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/IUnrealOuyaActivity.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/IUnrealOuyaActivity.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/UnrealOuyaFacade.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/UnrealOuyaFacade.java" />
+		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/UnrealOuyaPlugin.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/UnrealOuyaPlugin.java" />
 	</resourceCopies>
 
 	<!-- optional additions to proguard -->
