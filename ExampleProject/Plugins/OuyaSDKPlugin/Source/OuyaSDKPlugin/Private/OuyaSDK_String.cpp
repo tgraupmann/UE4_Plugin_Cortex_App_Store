@@ -54,7 +54,8 @@ namespace java_lang_String
 #if ENABLE_VERBOSE_LOGGING
 			__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "Searching for %s", strClass);
 #endif
-			jclass localRef = FAndroidApplication::FindJavaClass(strClass);
+			// system classes don't use `FAndroidApplication`
+			jclass localRef = env->FindClass(strClass);
 			if (localRef)
 			{
 #if ENABLE_VERBOSE_LOGGING
