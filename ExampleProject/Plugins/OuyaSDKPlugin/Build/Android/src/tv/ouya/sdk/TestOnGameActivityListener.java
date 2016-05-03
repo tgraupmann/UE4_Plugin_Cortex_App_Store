@@ -21,18 +21,22 @@ public class TestOnGameActivityListener implements GameActivity.OnGameActivityLi
 	public boolean dispatchGenericMotionEvent(MotionEvent motionEvent) {
 		Log.i(TAG, "*** dispatchGenericMotionEvent ***");
 
-    	// OUYA handles remapping native input
-		// Pass the native input that's been remapped to the view
-    	mInputView.remappedDispatchGenericMotionEvent(motionEvent);
+		if (null != mInputView) {
+			// OUYA handles remapping native input
+			// Pass the native input that's been remapped to the view
+			mInputView.remappedDispatchGenericMotionEvent(motionEvent);
+		}
 		return true;
 	}
 
 	public boolean dispatchKeyEvent(KeyEvent keyEvent) {
 		Log.i(TAG, "*** dispatchKeyEvent ***");
 
-		// OUYA handles remapping native input
-		// Pass the native input that's been remapped to the view
-		mInputView.remappedDispatchKeyEvent(keyEvent);
+		if (null != mInputView) {
+			// OUYA handles remapping native input
+			// Pass the native input that's been remapped to the view
+			mInputView.remappedDispatchKeyEvent(keyEvent);
+		}
 		return true;
 	}
 		
@@ -58,9 +62,11 @@ public class TestOnGameActivityListener implements GameActivity.OnGameActivityLi
 	public void onDestroy() {
 		Log.i(TAG, "*** onDestroy ***");
 
-		// OUYA handles remapping native input
-		// shutdown the input remapping
-    	mInputView.shutdown();
+		if (null != mInputView) {
+			// OUYA handles remapping native input
+			// shutdown the input remapping
+			mInputView.shutdown();
+		}
 	}
 
 	public void onPause() {
