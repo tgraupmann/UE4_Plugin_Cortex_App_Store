@@ -11,7 +11,6 @@
 		<copyFile src="$S(PluginDir)/../../Build/Android/libs/ouya-sdk.jar" dst="$S(BuildDir)/libs/ouya-sdk.jar" />
 		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/DebugInput.java" dst="$S(BuildDir)/src/tv/ouya/sdk/DebugInput.java" />
 		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/OuyaInputView.java" dst="$S(BuildDir)/src/tv/ouya/sdk/OuyaInputView.java" />
-		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/PluginTestGameActivity.java" dst="$S(BuildDir)/src/tv/ouya/sdk/PluginTestGameActivity.java" />
 		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/TestOnGameActivityListener.java" dst="$S(BuildDir)/src/tv/ouya/sdk/TestOnGameActivityListener.java" />
 		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/AsyncCppInitOuyaPlugin.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/AsyncCppInitOuyaPlugin.java" />
 		<copyFile src="$S(PluginDir)/../../Build/Android/src/tv/ouya/sdk/unreal/AsyncCppOuyaContentInit.java" dst="$S(BuildDir)/src/tv/ouya/sdk/unreal/AsyncCppOuyaContentInit.java" />
@@ -55,6 +54,7 @@
 import android.view.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import tv.ouya.sdk.TestOnGameActivityListener;
 		</insert>
 	</gameActivityImportAdditions>
 
@@ -97,6 +97,9 @@ import java.util.List;
 
 	// The list of game activity listeners
 	private static List&lt;OnGameActivityListener&gt; sOnGameActivityListeners = new ArrayList();
+	
+	// Intercept GameActivity events
+	private static TestOnGameActivityListener sTestOnGameActivityListener = new TestOnGameActivityListener();
 
 	@Override
 	public boolean dispatchGenericMotionEvent(MotionEvent motionEvent) {
@@ -154,7 +157,9 @@ import java.util.List;
 
 	<!-- optional additions to GameActivity onCreate in GameActivity.java -->
 	<gameActivityOnCreateAdditions>
-		<insert>
+		<insert>		
+		GameActivity.registerOnGameActivityListener(sTestOnGameActivityListener);
+		
 		// notify listeners
 		for (OnGameActivityListener listener : sOnGameActivityListeners) {
 			listener.onCreate(savedInstanceState);

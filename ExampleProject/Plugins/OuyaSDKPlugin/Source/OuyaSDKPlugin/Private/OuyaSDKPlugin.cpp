@@ -31,7 +31,6 @@ using namespace tv_ouya_sdk_OuyaInputView;
 // function prototypes
 int SetupJNI();
 int RegisterJavaPluginClasses();
-int RegisterFromJavaPluginTestGameActivity();
 
 // Redefine a tag for logging
 #ifdef LOG_TAG
@@ -119,11 +118,6 @@ int SetupJNI()
 		return JNI_ERR;
 	}
 
-	if (RegisterFromJavaPluginTestGameActivity() == JNI_ERR)
-	{
-		return JNI_ERR;
-	}	
-
 #if ENABLE_VERBOSE_LOGGING
 	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** SetupJNI initialized successfully. ***");
 #endif
@@ -152,54 +146,6 @@ int RegisterJavaPluginClasses()
 		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to initialize the PluginOuya class! ***");
 		return JNI_ERR;
 	}
-	return JNI_OK;
-}
-
-// register classes from the JAVA
-int RegisterFromJavaPluginTestGameActivity()
-{
-#if ENABLE_VERBOSE_LOGGING
-	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** FAndroidApplication::GetJavaEnv() ***");
-#endif
-	JNIEnv* env = FAndroidApplication::GetJavaEnv();
-
-	const char* strPluginJavaClass = "tv/ouya/sdk/PluginTestGameActivity";
-#if ENABLE_VERBOSE_LOGGING
-	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Searching for %s... ***", strPluginJavaClass);
-#endif
-
-	jclass jcPluginJavaClass = FAndroidApplication::FindJavaClass(strPluginJavaClass);
-
-	if (jcPluginJavaClass)
-	{
-#if ENABLE_VERBOSE_LOGGING
-		__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Found class %s ***", strPluginJavaClass);
-#endif
-	}
-	else
-	{
-		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find class %s ***", strPluginJavaClass);
-		return JNI_ERR;
-	}
-
-	const char* strPluginJavaMethod = "initialize";
-	jmethodID jmInit = env->GetStaticMethodID(jcPluginJavaClass, strPluginJavaMethod, "()V");
-	if (jmInit)
-	{
-#if ENABLE_VERBOSE_LOGGING
-		__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Found method %s", strPluginJavaMethod);
-#endif
-	}
-	else
-	{
-		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "*** Failed to find method %s ***", strPluginJavaMethod);
-		return JNI_ERR;
-	}
-
-#if ENABLE_VERBOSE_LOGGING
-	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** Invoking method %s...", strPluginJavaMethod);
-#endif
-	env->CallStaticVoidMethod(jcPluginJavaClass, jmInit);
 	return JNI_OK;
 }
 
