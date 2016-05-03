@@ -29,8 +29,9 @@ using namespace OuyaSDK;
 using namespace tv_ouya_sdk_OuyaInputView;
 
 // function prototypes
-int SetupJNI();
+int32_t AndroidPluginHandleInput(struct android_app* app, AInputEvent* event);
 int RegisterJavaPluginClasses();
+int SetupJNI();
 
 // Redefine a tag for logging
 #ifdef LOG_TAG
@@ -42,6 +43,8 @@ int RegisterJavaPluginClasses();
 #undef ENABLE_VERBOSE_LOGGING
 #endif
 #define ENABLE_VERBOSE_LOGGING true
+
+extern struct android_app* GNativeAndroidApp;
 
 #endif
 
@@ -83,6 +86,9 @@ void FOuyaSDKPlugin::StartupModule()
 	{
 		UE_LOG(LogOuyaSDKPlugin, Log, TEXT("*** JNI failed to initialize! ***"));
 	}
+
+	// reassign android input callback
+	GNativeAndroidApp->onInputEvent = AndroidPluginHandleInput;
 #endif
 }
 
@@ -149,23 +155,14 @@ int RegisterJavaPluginClasses()
 	return JNI_OK;
 }
 
-// Use a global variable to cause the constructor to invoke
-AndroidPluginTestSetupCallbackAndroidInput GSetupCallbackAndroidInput;
-
 // define the callback function that will get the android input events
-int32_t AndroidPluginTestHandleRegisterCallbackAndroidInput(struct android_app* app, AInputEvent* event)
+int32_t AndroidPluginHandleInput(struct android_app* app, AInputEvent* event)
 {
 #if ENABLE_VERBOSE_LOGGING
-	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** This indicates a successful test. The callback was invoked! ***");
+	__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "*** AndroidPluginHandleInput: The callback was invoked! ***");
 #endif
 
 	return 0;
-}
-
-// Use the constructor to register the input callback using the global var: `GSetupCallbackAndroidInput`
-AndroidPluginTestSetupCallbackAndroidInput::AndroidPluginTestSetupCallbackAndroidInput()
-{
-	RegisterCallbackAndroidInput(AndroidPluginTestHandleRegisterCallbackAndroidInput);
 }
 
 #endif
