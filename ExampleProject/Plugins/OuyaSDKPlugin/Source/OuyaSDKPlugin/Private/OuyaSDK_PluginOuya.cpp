@@ -101,7 +101,7 @@ namespace OuyaSDK
 #if ENABLE_VERBOSE_LOGGING
 			__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "Searching for %s", strClass);
 #endif
-			jclass localRef = env->FindClass(strClass);
+			jclass localRef = FAndroidApplication::FindJavaClass(strClass);
 			if (localRef)
 			{
 #if ENABLE_VERBOSE_LOGGING
@@ -122,7 +122,7 @@ namespace OuyaSDK
 #if ENABLE_VERBOSE_LOGGING
 			__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "Searching for %s", strClass);
 #endif
-			jclass localRef = env->FindClass(strClass);
+			jclass localRef = FAndroidApplication::FindJavaClass(strClass);
 			if (localRef)
 			{
 #if ENABLE_VERBOSE_LOGGING
@@ -143,7 +143,7 @@ namespace OuyaSDK
 #if ENABLE_VERBOSE_LOGGING
 			__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "Searching for %s", strClass);
 #endif
-			jclass localRef = env->FindClass(strClass);
+			jclass localRef = FAndroidApplication::FindJavaClass(strClass);
 			if (localRef)
 			{
 #if ENABLE_VERBOSE_LOGGING
@@ -164,7 +164,7 @@ namespace OuyaSDK
 #if ENABLE_VERBOSE_LOGGING
 			__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "Searching for %s", strClass);
 #endif
-			jclass localRef = env->FindClass(strClass);
+			jclass localRef = FAndroidApplication::FindJavaClass(strClass);
 			if (localRef)
 			{
 #if ENABLE_VERBOSE_LOGGING
@@ -185,7 +185,7 @@ namespace OuyaSDK
 #if ENABLE_VERBOSE_LOGGING
 			__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "Searching for %s", strClass);
 #endif
-			jclass localRef = env->FindClass(strClass);
+			jclass localRef = FAndroidApplication::FindJavaClass(strClass);
 			if (localRef)
 			{
 #if ENABLE_VERBOSE_LOGGING
@@ -206,7 +206,7 @@ namespace OuyaSDK
 #if ENABLE_VERBOSE_LOGGING
 			__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "Searching for %s", strClass);
 #endif
-			jclass localRef = env->FindClass(strClass);
+			jclass localRef = FAndroidApplication::FindJavaClass(strClass);
 			if (localRef)
 			{
 #if ENABLE_VERBOSE_LOGGING
@@ -227,7 +227,7 @@ namespace OuyaSDK
 #if ENABLE_VERBOSE_LOGGING
 			__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "Searching for %s", strClass);
 #endif
-			jclass localRef = env->FindClass(strClass);
+			jclass localRef = FAndroidApplication::FindJavaClass(strClass);
 			if (localRef)
 			{
 #if ENABLE_VERBOSE_LOGGING
@@ -248,7 +248,7 @@ namespace OuyaSDK
 #if ENABLE_VERBOSE_LOGGING
 			__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "Searching for %s", strClass);
 #endif
-			jclass localRef = env->FindClass(strClass);
+			jclass localRef = FAndroidApplication::FindJavaClass(strClass);
 			if (localRef)
 			{
 #if ENABLE_VERBOSE_LOGGING
@@ -415,7 +415,7 @@ namespace OuyaSDK
 		//LOGI("get string class");
 
 		// Get a class reference for java.lang.String
-		jclass classString = env->FindClass("java/lang/String");
+		jclass classString = FAndroidApplication::FindJavaClass("java/lang/String");
 
 		//LOGI("create array");
 		jobjectArray products = env->NewObjectArray(productIds.size(), classString, NULL);

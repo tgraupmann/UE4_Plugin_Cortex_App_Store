@@ -59,7 +59,7 @@ namespace tv_ouya_console_api_content_OuyaContent
 #if ENABLE_VERBOSE_LOGGING
 			__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "Searching for %s", strClass);
 #endif
-			jclass localRef = env->FindClass(strClass);
+			jclass localRef = FAndroidApplication::FindJavaClass(strClass);
 			if (localRef)
 			{
 #if ENABLE_VERBOSE_LOGGING

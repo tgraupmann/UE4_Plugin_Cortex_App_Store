@@ -62,7 +62,7 @@ namespace org_json_JSONArray
 #if ENABLE_VERBOSE_LOGGING
 			__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "Searching for %s", strClass);
 #endif
-			jclass localRef = env->FindClass(strClass);
+			jclass localRef = FAndroidApplication::FindJavaClass(strClass);
 			if (localRef)
 			{
 #if ENABLE_VERBOSE_LOGGING

@@ -730,7 +730,7 @@ __android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG,
 *savedNativeMethod = {methodName.c_str(), signature.c_str(), method};
 
 // Find the class using the native
-jclass CallerJavaClass = env->FindClass(className.c_str());
+jclass CallerJavaClass = FAndroidApplication::FindJavaClass(className.c_str());
 if (env->RegisterNatives(CallerJavaClass, savedNativeMethod, 1)) {
 #if ENABLE_VERBOSE_LOGGING
 	__android_log_print(ANDROID_LOG_ERROR, LOG_TAG,
