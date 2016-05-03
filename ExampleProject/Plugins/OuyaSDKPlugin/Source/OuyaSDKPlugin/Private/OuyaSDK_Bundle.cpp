@@ -22,10 +22,10 @@
 #include "OuyaSDK_Bundle.h"
 
 // Get a reference to the JNI environment
-#include "../../../Core/Public/Android/AndroidApplication.h"
+#include "Android/AndroidApplication.h"
 
 // Get a reference to the JVM
-#include "../../../Launch/Public/Android/AndroidJNI.h"
+#include "Android/AndroidJNI.h"
 
 #include <android/log.h>
 #include <jni.h>

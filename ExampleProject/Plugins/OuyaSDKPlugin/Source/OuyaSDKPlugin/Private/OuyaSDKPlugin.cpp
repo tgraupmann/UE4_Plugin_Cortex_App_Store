@@ -11,13 +11,10 @@
 #include <android/log.h>
 
 // Get a reference to the JNI environment
-#include "../../../Core/Public/Android/AndroidApplication.h"
+#include "Android/AndroidApplication.h"
 
 // Get a reference to the JVM
-#include "../../../Launch/Public/Android/AndroidJNI.h"
-
-// The Android Input callback is defined in the launcher code
-#include "../../../Launch/Public/Android/LaunchAndroid.h"
+#include "Android/AndroidJNI.h"
 
 // OUYA handles remapping native input
 #include "OuyaSDK_OuyaInputView.h"
